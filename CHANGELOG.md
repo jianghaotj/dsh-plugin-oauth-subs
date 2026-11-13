@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.114 — Codex rejects `none`
+
+- The ChatGPT Codex family no longer advertises an `off` reasoning rung. `chatgpt.com/backend-api/codex` answers 400 `unsupported_value` for `reasoning.effort: "none"`, so leaving the effort unset produced a hard failure on every GPT-6 Astra / Sol / Luna request.
+- `normalizeCodexResponsesBody` now drops an explicit `none`/`null`/empty effort (and an empty reasoning object) instead of forwarding it, so any host that still sends off degrades to the model default.
+- Add regressions for the effort ladder and the body guard.
+
 ## 0.0.113 — Kiro IdC region selection
 
 - Kiro IdC login now accepts an AWS region from the UI and the login payload. The host is `https://oidc.<region>.amazonaws.com`, so an IAM Identity Center instance outside the historical `us-west-2` default can sign in.

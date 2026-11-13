@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-oauth-subs",
-  "version": "0.0.113",
+  "version": "0.0.114",
   "description": "Maintained JavaScript artifact fork of dsh-plugin-oauth-subs: subscription OAuth for DeepSeek Harness; explicit pinned updates only.",
   "license": "MIT",
   "repository": {
