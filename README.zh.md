@@ -66,6 +66,19 @@ IdC 的登录端点随 IAM Identity Center 实例所在区域变化：`https://o
 
 该区域只用于 OIDC 注册、设备码和刷新；Kiro 数据面仍按账号落在 `us-east-1`，欧洲区域账号落在 `eu-central-1`，不会把 IdC 区域当成用量接口的 host。
 
+### 上游超时
+
+每条上游请求有四个计时器：首字节、输出前总预算、流内静默，以及宿主自己的 300 秒静默看门狗。插件默认 `240s / 290s / 290s`，全部低于宿主的 300 秒，保证是插件先返回 504，而不是宿主报一个看不懂的 transport 错误。
+
+大上下文（十几万 token）的 Copilot/Gemini 首字节经常超过 120 秒，所以要按机器调整就在 `cordis.patch.yml` 的插件 config 里加：
+
+```yaml
+upstreamFirstByteMs: 240000   # 首字节窗口
+upstreamBudgetMs: 290000      # 输出前总预算（含重试）
+upstreamIdleMs: 290000        # 输出开始后的静默容忍
+```
+
+取值会被夹到 295 秒上限；非正数或非数字直接报错，不会悄悄退回默认值。`upstreamFirstByteMs` 大于 `upstreamBudgetMs` 时按预算截断。
 ### 导入已有凭据
 
 | 路径 | 系列 |

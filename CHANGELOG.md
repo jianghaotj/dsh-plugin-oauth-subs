@@ -6,6 +6,8 @@
 - Invalid region strings are rejected before any network call instead of silently falling back to the default; blank input keeps `us-west-2` for existing callers.
 - IdC sessions no longer store the sign-in region as the usage host. Kiro's data plane stays on `us-east-1`, with European regions mapped to `eu-central-1`, matching `KIRO_USAGE_REGIONS`.
 - Add synthetic regressions for region normalisation, the registration endpoint and the stored session regions. No live OAuth or billable request is exercised.
+- Upstream timers are configurable (`upstreamFirstByteMs` / `upstreamBudgetMs` / `upstreamIdleMs`) and default to 240s / 290s / 290s instead of 120s / 270s / 270s. A 130k-token Copilot turn that needed 120s+ to its first token no longer burns the whole budget on three doomed attempts. Values are clamped to the host's 295s watchdog ceiling and rejected when invalid.
+- Add synthetic regressions for timer defaults, overrides, clamping and fail-closed validation.
 
 ## 0.0.112 — UI regression fix
 

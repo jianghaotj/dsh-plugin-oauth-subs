@@ -66,6 +66,19 @@ The IdC sign-in host is regional: `https://oidc.<region>.amazonaws.com` for the 
 
 That region only drives OIDC client registration, the device code and refresh. Kiro's data plane stays on `us-east-1` (or `eu-central-1` for European accounts), so the IdC region is never reused as the usage host.
 
+### Upstream timeouts
+
+Each upstream request carries four clocks: first byte, the pre-output budget, post-output silence, and the host's own 300s idle watchdog. This build defaults to `240s / 290s / 290s`, all under the host's 300s, so the plugin answers 504 before the host turns it into an opaque transport error.
+
+Large-context Copilot/Gemini turns often need more than 120s to their first token. Per-machine overrides go in the plugin config block of `cordis.patch.yml`:
+
+```yaml
+upstreamFirstByteMs: 240000   # first-byte window
+upstreamBudgetMs: 290000      # pre-output budget, retries included
+upstreamIdleMs: 290000        # silence tolerated once output flows
+```
+
+Values are clamped to the 295s ceiling; non-positive or non-numeric values fail closed. A first-byte window wider than the budget is truncated to it.
 ### Import existing credentials
 
 | Path | Family |
