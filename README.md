@@ -3,7 +3,7 @@
 [简体中文](README.zh.md) | English
 
 > [!NOTE]
-> **This is the `jianghaotj` maintained JavaScript artifact fork (0.0.111), not an unchanged upstream mirror.**
+> **This is the `jianghaotj` maintained JavaScript artifact fork (0.0.112), not an unchanged upstream mirror.**
 > Based on the MIT artifact from [xxww0098](https://github.com/xxww0098/dsh-plugin-oauth-subs) via the [lingdong0128-sys mirror](https://github.com/lingdong0128-sys/dsh-plugin-oauth-subs); original author/contributor attribution is retained.
 > Original TypeScript sources and tests are unavailable in this tree. See [MAINTENANCE.md](MAINTENANCE.md) for scope, pinned updates and release limitations.
 

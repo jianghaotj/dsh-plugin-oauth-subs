@@ -3,7 +3,7 @@
 简体中文 | [English](README.md)
 
 > [!NOTE]
-> **本仓库是 `jianghaotj` 维护的 JavaScript 产物分支（0.0.111），不是原版的未修改镜像。**
+> **本仓库是 `jianghaotj` 维护的 JavaScript 产物分支（0.0.112），不是原版的未修改镜像。**
 > 基于 [xxww0098 原项目](https://github.com/xxww0098/dsh-plugin-oauth-subs) 的 MIT 工件及 [lingdong0128-sys 镜像](https://github.com/lingdong0128-sys/dsh-plugin-oauth-subs)。保留原作者与贡献者归属。
 > 缺少原 TypeScript 源码和原测试集；维护范围、固定版本更新与发布限制见 [MAINTENANCE.md](MAINTENANCE.md)。
 

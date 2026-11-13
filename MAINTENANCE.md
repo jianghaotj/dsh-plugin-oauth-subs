@@ -6,7 +6,7 @@ This is a maintained JavaScript artifact fork, not the original complete TypeScr
 
 - Artifact baseline: `7c6d13b4f1b7801c36e6ce8d154ce7b90ae923b4`.
 - Reviewed local fixes: `1b432c9ad639083f40c31ab6db620b4c51d6e80a` (5 files, Kiro enterprise/IdC, client UA and Copilot credit display).
-- Proposed maintenance version: **0.0.111**. A version in this manifest does not imply a published GitHub release or an npm package.
+- Proposed maintenance version: **0.0.112**. A version in this manifest does not imply a published GitHub release or an npm package.
 - The original `src/`, TypeScript configs and original test suite are absent. No claim of reproducible TypeScript compilation is made; maintenance changes apply directly to `lib/` and add focused regression tests. Legacy analysis/dev scripts remain in Git history/tree but are not part of the distributed package or the release build contract.
 
 ## Pinned installation and update behavior

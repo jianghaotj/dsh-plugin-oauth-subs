@@ -136,7 +136,7 @@ test('scanner finds synthetic secrets and backups without exposing matched value
 });
 test('maintenance metadata preserves MIT and declares an artifact-only pinned fork', () => {
   const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-  assert.equal(pkg.version, '0.0.111'); assert.equal(pkg.license, 'MIT');
+  assert.equal(pkg.version, '0.0.112'); assert.equal(pkg.license, 'MIT');
   assert.match(pkg.repository.url, /jianghaotj/); assert.equal(pkg.scripts.build, undefined);
   assert.match(readFileSync(new URL('../MAINTENANCE.md', import.meta.url), 'utf8'), /original.*test suite are absent/i);
 });

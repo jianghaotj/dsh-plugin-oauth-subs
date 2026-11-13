@@ -17,7 +17,7 @@ try {
   execFileSync('tar', ['-xzf', archive, '-C', tmp]);
   const pkg = join(tmp, 'package');
   const manifest = JSON.parse(readFileSync(join(pkg, 'package.json'), 'utf8'));
-  assert.equal(manifest.version, '0.0.111'); assert.equal(manifest.license, 'MIT');
+  assert.equal(manifest.version, JSON.parse(readFileSync('package.json', 'utf8')).version); assert.equal(manifest.license, 'MIT');
   assert.equal(manifest.repository.url, 'git+https://github.com/jianghaotj/dsh-plugin-oauth-subs.git');
   assert.equal(manifest.main, 'lib/index.js'); assert.equal(manifest.dsh.bundle.patch, './cordis.patch.yml');
   assert.match(readFileSync(join(pkg, 'LICENSE'), 'utf8'), /Copyright \(c\) 2026 dsh-plugin-oauth-subs contributors/);
