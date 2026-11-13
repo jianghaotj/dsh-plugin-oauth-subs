@@ -1,24 +1,19 @@
-name: smoke
-
-on:
-  push:
-  pull_request:
-
+name: maintenance-checks
+on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Syntax-check compiled lib files
-        run: |
-          set -e
-          count=0
-          for f in $(git ls-files 'lib/*.js' 'lib/**/*.js'); do
-            cp "$f" /tmp/check.mjs
-            node --check /tmp/check.mjs || { echo "SYNTAX FAIL: $f"; exit 1; }
-            count=$((count+1))
-          done
-          echo "OK: $count files parsed"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run test:pack
+      - run: npm run audit:history

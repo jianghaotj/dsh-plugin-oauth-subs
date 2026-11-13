@@ -3,39 +3,41 @@
 [简体中文](README.zh.md) | English
 
 > [!NOTE]
-> **This is a backup mirror of [`xxww0098/dsh-plugin-oauth-subs`](https://github.com/xxww0098/dsh-plugin-oauth-subs) (v0.0.110, MIT).**
-> The original repository has gone offline (404). All credit and copyright belong to **xxww0098**.
-> This copy is preserved **unchanged** — the plugin's functionality is identical to the original v0.0.110.
+> **This is the `jianghaotj` maintained JavaScript artifact fork (0.0.111), not an unchanged upstream mirror.**
+> Based on the MIT artifact from [xxww0098](https://github.com/xxww0098/dsh-plugin-oauth-subs) via the [lingdong0128-sys mirror](https://github.com/lingdong0128-sys/dsh-plugin-oauth-subs); original author/contributor attribution is retained.
+> Original TypeScript sources and tests are unavailable in this tree. See [MAINTENANCE.md](MAINTENANCE.md) for scope, pinned updates and release limitations.
 
 Use a **ChatGPT / Codex**, **xAI Grok**, **Zhipu GLM**, **AWS Kiro**, **Google Antigravity**, **Cursor**, **Ollama Cloud**, **Kimi Code Plan**, **GitHub Copilot**, **Devin Agent**, **Cline**, or **Claude** subscription—or an **OpenCode Go** API key—inside [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). The subscription families use a loopback proxy; OpenCode Go routes directly to its API. Model routes use the DSH `api` values `openai-responses`, `openai-completions`, and `anthropic-messages`.
 
 ## Provenance
 
-- This mirror was created on **2026-10-21** from the locally installed copy of `dsh-plugin-oauth-subs@0.0.110` — the package is **not** on the public npm registry, and the upstream repository (`xxww0098/dsh-plugin-oauth-subs`) is offline (404), making this the only surviving copy of the artifact.
-- All shipped files (`lib/`, `scripts/`, `assets/`, `cordis.patch.yml`, `package.json`, `LICENSE`, `AGENTS.md`) are byte-identical to that artifact. The only documentation-level changes: the attribution note above, this section, and de-linking `docs/` references (those files never shipped with the package, so the links were dead).
+- Artifact mirror baseline: `7c6d13b4f1b7801c36e6ce8d154ce7b90ae923b4` (v0.0.110).
+- Local patch baseline: `1b432c9ad639083f40c31ab6db620b4c51d6e80a`, with Kiro enterprise/region/UA and Copilot quota fixes. This maintenance branch is no longer byte-identical to upstream.
+- [LICENSE](LICENSE) retains the MIT notice. This is not an official client of the subscription providers.
 
 ## Install
 
 ```sh
-dsh plugin --profile web add https://github.com/xxww0098/dsh-plugin-oauth-subs
+# Replace the placeholder with a reviewed, published full commit SHA.
+dsh plugin --profile web add "https://github.com/jianghaotj/dsh-plugin-oauth-subs#<reviewed-commit-sha>"
 dsh web
 ```
 
-Open **订阅 / Subscriptions** — the host home sidebar entry under **插件 Plugins**. The workbench pins three top tabs — **额度 Quota**, **模型 Models**, **版本 Version** — with a provider rail on the left and a scrollable pane on the right. One card per account (quota on every card; Ollama Cloud has no quota bars). The **Version** card's **Installed** shows the version captured when this process loaded the plugin; after a self-install it stays on the old running version until restart. The plugin is desktop-first: it never spawns `dsh`/`npm` and never restarts the host — the Version card compares the running version with the GitHub latest tag, and **安装更新** self-installs the tag tarball into the profile's `node_modules` (a 15-minute auto-update switch lives in the same card; on a local-directory link the switch stays, but its note says `npm run build` hot-reloads the plugin and drops the release-tag result). If profile `node_modules` is newer than the running process, the card lists **On disk** and flags the stale process. Or `pnpm dsh web --patch ./cordis.patch.yml` (`id: oauth-subs`).
+Open **Subscriptions**. The **Version** tab checks this maintained repository only on explicit request. It does not automatically check, download, overwrite installed files or restart the host. To update, use the host plugin manager with a reviewed commit SHA, then restart and verify.
 
 ### Desktop
 
 The `desktop` profile is managed exclusively by the Electron app — `dsh plugin --profile desktop` is rejected. Install through the UI instead:
 
 1. DeepSeek Harness → **插件** (Plugins) → **添加插件**
-2. Paste `https://github.com/xxww0098/dsh-plugin-oauth-subs` → **安装**
+2. Paste `https://github.com/jianghaotj/dsh-plugin-oauth-subs#<reviewed-commit-sha>` (replace the full SHA) → **Install**
 3. Toggle the plugin on; the component row should read **运行中**
 
 Data lives under `~/.dsh/profiles/desktop/data/dsh-plugin-oauth-subs/` — logins are **not** shared with the web profile. To migrate existing accounts, quit the app, then copy `auth.json` (and `models.json` for picker state) from `~/.dsh/profiles/web/data/dsh-plugin-oauth-subs/` into that directory and relaunch. Copy while the app is stopped: the plugin holds tokens in memory and may overwrite a hot edit.
 
 The proxy port (`8318` by default) is a global loopback bind — web and desktop profiles cannot run simultaneously (`EADDRINUSE`). Kill the other profile or set a different `config.port` under `id: oauth-subs` in the profile's `cordis.patch.yml`.
 
-This plugin is specialized for Desktop: the host-lifecycle surface (DSH-CLI/npm update, restart-host) has been **removed**, not hidden — the Electron app owns the profile and process. Updates are self-installed: **检查更新 → 安装更新** downloads the release tarball and swaps the plugin dirs in place (or turn on **Auto-update** for 15-minute checks); restart the app to load the new copy. Your `data/` directory survives either way. Manual fallback: **插件** → 卸载 → 添加插件 → reinstall the repo URL.
+In this maintained fork, in-place self-installation is disabled, including legacy auto-update preferences. Use the host plugin manager to select a reviewed full commit SHA; record the prior SHA and protect account data before an explicitly approved restart.
 
 If the app exits instantly on launch, check `launchctl getenv ELECTRON_RUN_AS_NODE` — that variable in the user launchd environment forces every Electron app into plain Node mode; `launchctl unsetenv ELECTRON_RUN_AS_NODE` fixes it.
 
@@ -175,8 +177,10 @@ Refresh about once a minute, or **Refresh quota**. Bars: `hsl(remaining × 1.2, 
 ## Develop
 
 ```sh
+npm ci --ignore-scripts
 npm test
-npm run analyze -- path/to/session.jsonl
+npm run test:pack
+npm run audit:history
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+This branch maintains JavaScript artifacts directly; there is no TypeScript build step. Tests use synthetic data, not real logins or paid requests. See [MAINTENANCE.md](MAINTENANCE.md) and [AGENTS.md](AGENTS.md).

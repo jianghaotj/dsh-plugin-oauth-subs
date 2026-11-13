@@ -1,0 +1,13 @@
+node_modules/
+.test-cache/
+.test-home/
+.test-tmp/
+artifacts/
+*.tgz
+*.bak*
+*.log
+.env
+.env.*
+data/
+.dev-build.json
+.DS_Store

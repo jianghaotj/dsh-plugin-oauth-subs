@@ -1,26 +1,9 @@
-/**
- * Local version + GitHub latest-release check, plus self-install.
- *
- * This plugin is desktop-first: the Electron app owns the profile (`dsh
- * plugin --profile desktop` is refused) and the process lifecycle, so the
- * update path never touches `dsh`/`npm` and never restarts the host. The
- * About card compares the running version with the GitHub latest tag;
- * `installRelease` downloads the tag tarball and swaps the installed package
- * dirs in place (the only spawn is `tar` for unpacking), then flags the new
- * copy as pending until the host restarts.
- *
- * About "当前版本" is the package this process actually loaded
- * (`import.meta.url` → `../../package.json`). Profile
- * `node_modules/dsh-plugin-oauth-subs/package.json` can already be newer
- * while Cordis still requires another copy — compare GitHub against the
- * running module. `.dsh-module-fallback` and `$DSH_HOME/profiles/node_modules`
- * are extra copies we report, not the About version.
- */
+/** Explicit maintained-repository metadata checks. Self-installation is disabled. */
 export declare function modulePackageJsonPath(): string;
-export declare const REPO_SLUG = "xxww0098/dsh-plugin-oauth-subs";
-export declare const REPO_URL = "https://github.com/xxww0098/dsh-plugin-oauth-subs";
-export declare const RELEASES_API = "https://api.github.com/repos/xxww0098/dsh-plugin-oauth-subs/releases/latest";
-export declare const RELEASES_LATEST_HTML = "https://github.com/xxww0098/dsh-plugin-oauth-subs/releases/latest";
+export declare const REPO_SLUG = "jianghaotj/dsh-plugin-oauth-subs";
+export declare const REPO_URL = "https://github.com/jianghaotj/dsh-plugin-oauth-subs";
+export declare const RELEASES_API = "https://api.github.com/repos/jianghaotj/dsh-plugin-oauth-subs/releases/latest";
+export declare const RELEASES_LATEST_HTML = "https://github.com/jianghaotj/dsh-plugin-oauth-subs/releases/latest";
 export declare const PLATFORMS: readonly string[];
 export declare const PLUGIN_NAME = "dsh-plugin-oauth-subs";
 export declare const DEFAULT_PROFILE = "web";
@@ -137,32 +120,12 @@ export declare function releaseTarballUrl(tag: any): string | undefined;
  * entries that do not parse as package.json simply do not exist.
  */
 export declare function installedPackageDirs(profile?: string, env?: NodeJS.ProcessEnv, { readFileFn, realpathFn, resolveFn }?: any): any[];
-export declare function installRelease(options?: any): Promise<{
-    status: string;
-    error: string;
-    command?: undefined;
-    version?: undefined;
-    dirs?: undefined;
-    restart?: undefined;
-} | {
-    status: string;
+export interface ManualUpdateResult {
+    status: "manual";
+    reason: "pinned-install";
+    url: string;
     command: string;
-    error?: undefined;
-    version?: undefined;
-    dirs?: undefined;
-    restart?: undefined;
-} | {
-    status: string;
-    error: string;
-    command: string;
-    version?: undefined;
-    dirs?: undefined;
-    restart?: undefined;
-} | {
-    status: string;
-    version: string;
-    dirs: any[];
-    restart: string;
-    error?: undefined;
-    command?: undefined;
-}>;
+}
+export declare function manualUpdateResult(): ManualUpdateResult;
+/** Compatibility API; performs no network requests or installation writes. */
+export declare function installRelease(options?: any): Promise<ManualUpdateResult>;

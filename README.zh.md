@@ -3,39 +3,41 @@
 简体中文 | [English](README.md)
 
 > [!NOTE]
-> **本仓库是 [`xxww0098/dsh-plugin-oauth-subs`](https://github.com/xxww0098/dsh-plugin-oauth-subs)（v0.0.110，MIT）的备份镜像。**
-> 原仓库已下线（404）。所有功能与版权归属原作者 **xxww0098**。
-> 本副本原样保留，插件功能与原版 v0.0.110 完全一致，仅作留存用途。
+> **本仓库是 `jianghaotj` 维护的 JavaScript 产物分支（0.0.111），不是原版的未修改镜像。**
+> 基于 [xxww0098 原项目](https://github.com/xxww0098/dsh-plugin-oauth-subs) 的 MIT 工件及 [lingdong0128-sys 镜像](https://github.com/lingdong0128-sys/dsh-plugin-oauth-subs)。保留原作者与贡献者归属。
+> 缺少原 TypeScript 源码和原测试集；维护范围、固定版本更新与发布限制见 [MAINTENANCE.md](MAINTENANCE.md)。
 
 把 **ChatGPT / Codex**、**xAI Grok**、**智谱 GLM**、**AWS Kiro**、**Google Antigravity**、**Cursor**、**Ollama Cloud**、**Kimi Code Plan**、**GitHub Copilot**、**Devin Agent**、**Cline**、**Claude** 的订阅，以及 **OpenCode Go** API key 接到 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)。订阅家族通过本机回环代理；OpenCode Go 直连其 API。模型路由使用 DSH 的 `openai-responses`、`openai-completions`、`anthropic-messages` 三种 `api`。
 
 ## 出处
 
-- 本镜像创建于 **2026-10-21**，来源为本机安装的 `dsh-plugin-oauth-subs@0.0.110` 工件——该包**未**发布在公共 npm registry，上游仓库（`xxww0098/dsh-plugin-oauth-subs`）已下线（404），此为本工件仅存的拷贝。
-- 所有随包文件（`lib/`、`scripts/`、`assets/`、`cordis.patch.yml`、`package.json`、`LICENSE`、`AGENTS.md`）与原工件逐字节一致；仅有的文档级改动：顶部备份标注、本节，以及将 `docs/` 引用去链接化（这些文件从未随包发布，链接原本就是死链）。
+- 镜像基线：`7c6d13b4f1b7801c36e6ce8d154ce7b90ae923b4`（v0.0.110 发布工件）。
+- 本地补丁基线：`1b432c9ad639083f40c31ab6db620b4c51d6e80a`，包含 Kiro 企业登录/区域/UA 与 Copilot 配额显示修复。后续维护不再宣称逐字节等同原版。
+- [LICENSE](LICENSE) 保留原 MIT 声明；本项目不是相关订阅服务提供商的官方客户端。
 
 ## 安装
 
 ```sh
-dsh plugin --profile web add https://github.com/xxww0098/dsh-plugin-oauth-subs
+# Replace the placeholder with a reviewed, published full commit SHA.
+dsh plugin --profile web add "https://github.com/jianghaotj/dsh-plugin-oauth-subs#<reviewed-commit-sha>"
 dsh web
 ```
 
-打开主页侧边栏 **订阅**（**插件**按钮下方的入口）。工作台顶部固定三个页签——**额度 / 模型 / 版本**，左侧是供应商栏，右侧内容区滚动。每个账号一张卡片（额度都在卡片上；Ollama Cloud 没有额度条）。**版本**页的 **当前版本** 固定显示本进程加载插件时的版本；自安装后仍显示旧运行版本，直到重启。本插件专攻 desktop：自身不 spawn `dsh`/`npm`，也不会重启宿主——版本卡对比运行版本与 GitHub 最新 tag，点 **安装更新** 会把 tag 的 tarball 自安装进 profile 的 `node_modules`（同卡还有每 15 分钟检查的自动更新开关；「本地插件目录」热链时开关照旧，只是提示改成 `npm run build` 热重载、不列 release 结果）。profile `node_modules` 比运行进程新时会列出 **磁盘** 并标记过期进程。或 `pnpm dsh web --patch ./cordis.patch.yml`（`id: oauth-subs`）。
+打开主页侧边栏 **订阅**。**版本**页仅在点击时检查本维护仓库的发布元数据；不会自动检查、下载、原地安装或重启宿主。更新时使用宿主插件管理器明确选择审核过的提交 SHA，并在安装后重启验证。
 
 ### Desktop
 
 `desktop` profile 由 Electron 应用独占管理，`dsh plugin --profile desktop` 会被拒绝。走界面安装：
 
 1. DeepSeek Harness → **插件** → **添加插件**
-2. 粘贴 `https://github.com/xxww0098/dsh-plugin-oauth-subs` → **安装**
+2. 粘贴 `https://github.com/jianghaotj/dsh-plugin-oauth-subs#<reviewed-commit-sha>`（替换完整 SHA）→ **安装**
 3. 打开开关；组件行应显示 **运行中**
 
 数据在 `~/.dsh/profiles/desktop/data/dsh-plugin-oauth-subs/`，登录态**不**与 web profile 共享。迁移已有账号：先退出应用，把 `~/.dsh/profiles/web/data/dsh-plugin-oauth-subs/` 下的 `auth.json`（勾选状态另有 `models.json`）复制到该目录，再启动。必须在退出状态下拷贝——插件把 token 缓存在内存，热改可能被覆写。
 
 代理端口（默认 `8318`）是全局回环绑定，web 与 desktop profile 不能同时运行（`EADDRINUSE`）。杀掉另一个 profile，或在该 profile 的 `cordis.patch.yml` 里给 `id: oauth-subs` 改 `config.port`。
 
-本插件专攻 desktop：宿主生命周期面（DSH CLI/npm 更新、重启宿主）已**整体删除**而非隐藏——Electron 应用独占管理 profile 与进程。升级是自安装的：**检查更新 → 安装更新** 会下载 release tarball 原地换目录（或打开 **自动更新** 每 15 分钟检查）；装好后重启应用加载新版本。`data/` 目录保留，登录态不丢。手动兜底：**插件** → 卸载 → 添加插件 → 重装仓库地址。
+维护版禁止插件内部原地自安装，旧版保存的自动更新开关也不会重新启用。宿主插件管理器负责显式安装；先记录旧 SHA 和回滚方法，保护用户数据，安装完成后由用户批准重启。固定 SHA 不应被后台 release 检查替换。
 
 如果应用启动即退：检查 `launchctl getenv ELECTRON_RUN_AS_NODE`——该变量会让所有 Electron 应用退化成纯 Node 模式，`launchctl unsetenv ELECTRON_RUN_AS_NODE` 即可修复。
 
@@ -175,8 +177,10 @@ Codex Priority 回显 `created=auto` / `completed=default` 不能当确认（ope
 ## 开发
 
 ```sh
+npm ci --ignore-scripts
 npm test
-npm run analyze -- path/to/session.jsonl
+npm run test:pack
+npm run audit:history
 ```
 
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+本分支直接维护 JavaScript 产物，没有 TypeScript 构建步骤。测试不登录真实账号、不消耗付费额度。见 [MAINTENANCE.md](MAINTENANCE.md) 与 [AGENTS.md](AGENTS.md)。

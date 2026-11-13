@@ -465,89 +465,13 @@ export declare class AuthController {
     }>;
     refreshQuota(provider: any, accountId?: any): any;
     consumeReset(provider: any, accountId: any): Promise<any>;
-    /**
-     * Version check + self-install. `apply` downloads the latest tag tarball and
-     * swaps the installed package dirs in place — the profile layout is the same
-     * on desktop and web, so this never needs `dsh`/`npm`. The new copy loads on
-     * the next host start (`apply.restart` says which restart to ask for). If no
-     * installed dir exists the apply degrades to a `manual` command hint.
-     */
-    checkUpdate(payload?: any): Promise<{
-        apply: any;
-        version: any;
-        status: string;
-        latest: {
-            tag: string | undefined;
-            name: any;
-            url: any;
-            publishedAt: string | undefined;
-        };
-        assets: {
-            platform: string;
-            current: boolean;
-            name: any;
-            url: any;
-            size: any;
-        }[];
-        running: any;
-        devVersion: string | undefined;
-        linked: boolean;
-        linkedPath: string | undefined;
-        disk: any;
-        resolved: any;
-        runningPath: string;
-        diskPath: string;
-        resolvedPath: any;
-        copies: {
-            path: string;
-            version: any;
-        }[];
-        staleProcess: boolean;
-        staleLoad: boolean;
-        platform: string;
-        repo: string;
-        repoSlug: string;
-    } | {
-        status: string;
-        error: string;
-        latest: undefined;
-        assets: never[];
-        apply: {
-            status: string;
-        };
-        version: any;
-        running: any;
-        devVersion: string | undefined;
-        linked: boolean;
-        linkedPath: string | undefined;
-        disk: any;
-        resolved: any;
-        runningPath: string;
-        diskPath: string;
-        resolvedPath: any;
-        copies: {
-            path: string;
-            version: any;
-        }[];
-        staleProcess: boolean;
-        staleLoad: boolean;
-        platform: string;
-        repo: string;
-        repoSlug: string;
-    }>;
-    /** Persist the auto-update switch; turning it on runs one pass now. */
-    setAutoUpdate(payload?: any): Promise<{
-        autoUpdate: boolean;
-    }>;
-    /**
-     * One auto-update pass: check the latest tag and self-install it when newer.
-     * The outcome lands in update-state.json so About can show what the
-     * background loop last did.
-     */
-    runAutoUpdate(): Promise<any>;
-    startAutoUpdateWatch({ intervalMs }?: {
-        intervalMs?: number | undefined;
-    }): void;
+    /** Explicit metadata check; apply=true returns manual pinned-update instructions. */
+    checkUpdate(payload?: any): Promise<any>;
+    /** Compatibility RPC. Never enables automatic updates. */
+    setAutoUpdate(payload?: any): Promise<{ autoUpdate: false; reason: "pinned-install" }>;
+    runAutoUpdate(): Promise<{ skipped: true; reason: "pinned-install" }>;
+    /** No-op: automatic checks and timers are disabled. */
+    startAutoUpdateWatch(): void;
     stopAutoUpdateWatch(): void;
     /**
      * Background credential sweep — CLIProxyAPI's authAutoRefreshLoop shape.

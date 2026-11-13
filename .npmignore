@@ -1,0 +1,11 @@
+**/*.bak*
+**/*.log
+**/.env*
+**/auth.json
+**/credentials.json
+**/proxy-key
+**/*.pem
+**/*.key
+node_modules/
+.test-*/
+artifacts/
