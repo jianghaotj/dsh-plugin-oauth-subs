@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.113 — Kiro IdC region selection
+
+- Kiro IdC login now accepts an AWS region from the UI and the login payload. The host is `https://oidc.<region>.amazonaws.com`, so an IAM Identity Center instance outside the historical `us-west-2` default can sign in.
+- Invalid region strings are rejected before any network call instead of silently falling back to the default; blank input keeps `us-west-2` for existing callers.
+- IdC sessions no longer store the sign-in region as the usage host. Kiro's data plane stays on `us-east-1`, with European regions mapped to `eu-central-1`, matching `KIRO_USAGE_REGIONS`.
+- Add synthetic regressions for region normalisation, the registration endpoint and the stored session regions. No live OAuth or billable request is exercised.
+
 ## 0.0.112 — UI regression fix
 
 - Restore the original pure VersionBand presentation component. The 0.0.111 automatic-update cleanup accidentally removed it while AboutPanel still referenced it; retained hidden panels caused the entire subscription page to fail rendering.

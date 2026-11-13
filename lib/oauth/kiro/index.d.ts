@@ -21,6 +21,7 @@ export declare const KIRO_OIDC_SCOPES: readonly string[];
 export declare const KIRO_USAGE_VERSION = "1.0.0";
 export declare const KIRO_NEVER_EXPIRES = 8640000000000000;
 export declare const KIRO_DEFAULT_REGION = "us-east-1";
+export declare function normalizeKiroRegion(value?: unknown, fallback?: string): string;
 export declare const KIRO_CONTEXT_WINDOW = 200000;
 export declare const KIRO_LARGE_CONTEXT = 1000000;
 export declare const KIRO_GPT_CONTEXT = 1000000;

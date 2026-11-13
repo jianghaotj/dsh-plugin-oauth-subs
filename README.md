@@ -60,6 +60,12 @@ If the app exits instantly on launch, check `launchctl getenv ELECTRON_RUN_AS_NO
 | Claude (Anthropic) | PKCE Claude.ai `claude.com/cai` or Console `platform.claude.com` (loopback `/callback`); read-only import of the local Claude Code login | `anthropic-messages` | `api.anthropic.com/v1/messages` (`claude-code-20250219` + `oauth-2025-04-20` beta identity) |
 | OpenCode Go | Paste API key; optional Console cookie and workspace for quota | `openai-completions` / `openai-responses` | Direct `https://opencode.ai/zen/go/v1` |
 
+### Kiro IdC region
+
+The IdC sign-in host is regional: `https://oidc.<region>.amazonaws.com` for the region that holds your IAM Identity Center instance. The IdC form now takes an AWS region (`us-west-2`, `ap-southeast-1`, …); blank keeps the historical default `us-west-2`, and a malformed region fails before any network call.
+
+That region only drives OIDC client registration, the device code and refresh. Kiro's data plane stays on `us-east-1` (or `eu-central-1` for European accounts), so the IdC region is never reused as the usage host.
+
 ### Import existing credentials
 
 | Path | Family |

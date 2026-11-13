@@ -60,6 +60,12 @@ dsh web
 | Claude (Anthropic) | PKCE Claude.ai `claude.com/cai` 或 Console `platform.claude.com`（本机 `/callback`）；只读导入本机 Claude Code 登录 | `anthropic-messages` | `api.anthropic.com/v1/messages`（`claude-code-20250219` + `oauth-2025-04-20` beta 指纹） |
 | OpenCode Go | 粘贴 API key；可选 Console cookie 与工作区以读取额度 | `openai-completions` / `openai-responses` | 直连 `https://opencode.ai/zen/go/v1` |
 
+### Kiro IdC 区域
+
+IdC 的登录端点随 IAM Identity Center 实例所在区域变化：`https://oidc.<region>.amazonaws.com`。IdC 表单里可填 AWS 区域（如 `us-west-2`、`ap-southeast-1`），留空沿用默认 `us-west-2`；非法区域会在发起登录前报错。
+
+该区域只用于 OIDC 注册、设备码和刷新；Kiro 数据面仍按账号落在 `us-east-1`，欧洲区域账号落在 `eu-central-1`，不会把 IdC 区域当成用量接口的 host。
+
 ### 导入已有凭据
 
 | 路径 | 系列 |
